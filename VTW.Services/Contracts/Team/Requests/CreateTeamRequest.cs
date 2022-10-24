@@ -1,0 +1,14 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace VTW.API.Services.Contracts.Team.Requests
+{
+    public class CreateTeamRequest
+    {
+        public string TeamName { get; set; }
+        public int TeamCategoryId { get; set; }
+    }
+}
