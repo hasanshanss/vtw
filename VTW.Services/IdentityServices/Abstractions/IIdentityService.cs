@@ -13,5 +13,6 @@ namespace VTW.API.Services.IdentityServices.Abstractions
     {
         Task<AuthenticationResult> RegisterAsync(UserAuthenticationRequest user);
         Task<AuthenticationResult> LoginAsync(UserAuthenticationRequest user);
+        Task<AuthenticationResult> RefreshTokenAsync(string token, string refreshToken);
     }
 }

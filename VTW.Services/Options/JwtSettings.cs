@@ -12,6 +12,12 @@
             get;
             set;
         }
+
+        public TimeSpan TokenLifetime
+        {
+            get;
+            set;
+        }
         public bool ValidateIssuer
         {
             get;

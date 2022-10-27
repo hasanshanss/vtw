@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using VTW.DAL.Entities;
 
@@ -11,9 +12,10 @@ using VTW.DAL.Entities;
 namespace VTW.DAL.Migrations
 {
     [DbContext(typeof(VtwContext))]
-    partial class VtwContextModelSnapshot : ModelSnapshot
+    [Migration("20221027060510_RefreshTokenIdChanged")]
+    partial class RefreshTokenIdChanged
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -222,7 +224,7 @@ namespace VTW.DAL.Migrations
 
             modelBuilder.Entity("VTW.DAL.Entities.RefreshToken", b =>
                 {
-                    b.Property<string>("Token")
+                    b.Property<string>("JwtId")
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<DateTime>("CreationDate")
@@ -234,7 +236,7 @@ namespace VTW.DAL.Migrations
                     b.Property<bool>("Invalidated")
                         .HasColumnType("bit");
 
-                    b.Property<string>("JwtId")
+                    b.Property<string>("Token")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -245,7 +247,7 @@ namespace VTW.DAL.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
-                    b.HasKey("Token");
+                    b.HasKey("JwtId");
 
                     b.HasIndex("UserId");
 

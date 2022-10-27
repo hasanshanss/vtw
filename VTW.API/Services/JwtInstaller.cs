@@ -1,10 +1,7 @@
 ﻿using VTW.Services.Options.JwtOptions;
 using VTW.API.Services.Abstractions;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
-using System.Text;
-using VTW.API.Services.Abstractions;
 
 namespace VRW.API.Services.ServiceInstallers
 {
@@ -12,10 +9,21 @@ namespace VRW.API.Services.ServiceInstallers
     {
         public void InstallServices(IServiceCollection services, IConfiguration configuration)
         {
-
             var jwtSettings = new JwtSettings();
             configuration.Bind(nameof(jwtSettings), jwtSettings);
             services.AddSingleton(jwtSettings);
+
+            var tokenValidaitonParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters()
+            {
+                ValidateIssuerSigningKey = true,
+                IssuerSigningKey = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(jwtSettings.Secret)),
+                ValidateIssuer = false,
+                ValidateAudience = false,
+                RequireExpirationTime = false,
+                ValidateLifetime = true
+            };
+
+            services.AddSingleton(tokenValidaitonParameters);
 
             services.AddAuthentication(options =>
             {
@@ -40,15 +48,7 @@ namespace VRW.API.Services.ServiceInstallers
                     //    ClockSkew = TimeSpan.FromDays(1),
                     //};
 
-                    options.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters()
-                    {
-                        ValidateIssuerSigningKey = true,
-                        IssuerSigningKey = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(jwtSettings.Secret)),
-                        ValidateIssuer = false,
-                        ValidateAudience = false,
-                        RequireExpirationTime = false,
-                        ValidateLifetime = true
-                    };
+                    options.TokenValidationParameters = tokenValidaitonParameters;
                 });
         }
     }
