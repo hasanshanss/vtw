@@ -5,11 +5,14 @@ namespace VTW.DAL.Entities
 {
     public partial class Vote : BaseEntity<long>
     {
-        public bool IsCompleted { get; set; }
-        public long Team1 { get; set; }
-        public long Team2 { get; set; }
-
-        public virtual Team Team1Navigation { get; set; } = null!;
-        public virtual Team Team2Navigation { get; set; } = null!;
+        public Vote()
+        {
+            VoteTeamInfoNavigations = new HashSet<VoteTeamInfo>();
+        }
+        public bool IsStarted { get; set; }
+        public bool IsFinished { get; set; }
+        public DateTime StartDate { get; set; }
+        public DateTime EndDate { get; set; }
+        public virtual ICollection<VoteTeamInfo> VoteTeamInfoNavigations { get; set; } = null!;
     }
 }

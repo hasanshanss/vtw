@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using VTW.DAL.Entities;
 
@@ -11,9 +12,10 @@ using VTW.DAL.Entities;
 namespace VTW.DAL.Migrations
 {
     [DbContext(typeof(VtwContext))]
-    partial class VtwContextModelSnapshot : ModelSnapshot
+    [Migration("20221028165040_VoteEntityAdded")]
+    partial class VoteEntityAdded
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
