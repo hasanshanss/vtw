@@ -1,18 +1,22 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Identity;
+using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace VTW.DAL.Entities
 {
     public partial class Vote : BaseEntity<long>
     {
-        public Vote()
-        {
-            VoteTeamInfoNavigations = new HashSet<VoteTeamInfo>();
-        }
-        public bool IsStarted { get; set; }
-        public bool IsFinished { get; set; }
-        public DateTime StartDate { get; set; }
-        public DateTime EndDate { get; set; }
-        public virtual ICollection<VoteTeamInfo> VoteTeamInfoNavigations { get; set; } = null!;
+        public string VoterId { get; set; } = null!;
+        public Voter VoterNavigation { get; set; } = null!;
+        public int GameTeamInfoId { get; set; }
+        public GameTeamInfo GameTeamInfoNavigation { get; set; } = null!;
+        public decimal VoteAmount { get; set; }
+
+        [DataType(DataType.DateTime)]
+        public DateTime VotedDate { get; set; }
     }
 }

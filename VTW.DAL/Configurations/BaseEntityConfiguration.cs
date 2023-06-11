@@ -10,7 +10,6 @@ namespace VTW.DAL.Configurations
         {
             builder.Property<TId>("Id").HasColumnName(typeof(TEntity).Name + "Id");
             builder.Property(e => e.CreatedDate).HasDefaultValueSql("(getdate())");
-            builder.Property<bool>("IsDeleted").HasDefaultValue(false);
             builder.HasQueryFilter(m => !EF.Property<bool>(m, "IsDeleted"));
         }
     }

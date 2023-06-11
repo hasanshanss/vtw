@@ -13,7 +13,8 @@ namespace VTW.DAL.Repositories
     {
         public VoteRepository(VtwContext context) : base(context)
         {
+
         }
-      
+
     }
 }

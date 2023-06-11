@@ -86,10 +86,6 @@ namespace VTW.DAL.Migrations
                         .IsConcurrencyToken()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Discriminator")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("Email")
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
@@ -141,8 +137,6 @@ namespace VTW.DAL.Migrations
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("AspNetUsers", (string)null);
-
-                    b.HasDiscriminator<string>("Discriminator").HasValue("IdentityUser");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
@@ -226,23 +220,17 @@ namespace VTW.DAL.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("VTW.DAL.Entities.Bet", b =>
+            modelBuilder.Entity("VTW.DAL.Entities.Game", b =>
                 {
-                    b.Property<long>("Id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint")
-                        .HasColumnName("BetId");
+                        .HasColumnType("int")
+                        .HasColumnName("GameId");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"), 1L, 1);
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<decimal>("BetAmount")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<DateTime>("BetPlacedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<byte>("BetType")
-                        .HasColumnType("tinyint");
+                    b.Property<int>("CreatedBy")
+                        .HasColumnType("int");
 
                     b.Property<DateTime>("CreatedDate")
                         .ValueGeneratedOnAdd()
@@ -252,31 +240,89 @@ namespace VTW.DAL.Migrations
                     b.Property<DateTime?>("DeletedDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<bool>("IsDeleted")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bit")
-                        .HasDefaultValue(false);
+                    b.Property<DateTime>("EndDate")
+                        .HasColumnType("datetime2");
 
-                    b.Property<byte[]>("Version")
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsFinished")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsStarted")
+                        .HasColumnType("bit");
+
+                    b.Property<byte[]>("RowVersion")
                         .IsConcurrencyToken()
                         .IsRequired()
                         .ValueGeneratedOnAddOrUpdate()
                         .HasColumnType("rowversion");
 
-                    b.Property<long>("VoteTeamInfoId")
-                        .HasColumnType("bigint");
-
-                    b.Property<string>("VoterId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<DateTime>("StartDate")
+                        .HasColumnType("datetime2");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("VoteTeamInfoId");
+                    b.ToTable("Games", (string)null);
+                });
 
-                    b.HasIndex("VoterId");
+            modelBuilder.Entity("VTW.DAL.Entities.GameTeamInfo", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnName("GameTeamInfoId");
 
-                    b.ToTable("Bets", (string)null);
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<int>("CreatedBy")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("(getdate())");
+
+                    b.Property<DateTime?>("DeletedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("FirstVoterId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("GameId")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("MostVoterId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<byte[]>("RowVersion")
+                        .IsConcurrencyToken()
+                        .IsRequired()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion");
+
+                    b.Property<int>("TeamId")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("TotalAmount")
+                        .HasPrecision(12)
+                        .HasColumnType("decimal(12,2)");
+
+                    b.Property<float>("TotalPercent")
+                        .HasColumnType("real");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("GameId");
+
+                    b.HasIndex("TeamId");
+
+                    b.ToTable("GameTeamInfos", (string)null);
                 });
 
             modelBuilder.Entity("VTW.DAL.Entities.RefreshToken", b =>
@@ -313,12 +359,15 @@ namespace VTW.DAL.Migrations
 
             modelBuilder.Entity("VTW.DAL.Entities.Team", b =>
                 {
-                    b.Property<long>("Id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint")
+                        .HasColumnType("int")
                         .HasColumnName("TeamId");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"), 1L, 1);
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<int>("CreatedBy")
+                        .HasColumnType("int");
 
                     b.Property<DateTime>("CreatedDate")
                         .ValueGeneratedOnAdd()
@@ -329,9 +378,13 @@ namespace VTW.DAL.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<bool>("IsDeleted")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bit")
-                        .HasDefaultValue(false);
+                        .HasColumnType("bit");
+
+                    b.Property<byte[]>("RowVersion")
+                        .IsConcurrencyToken()
+                        .IsRequired()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion");
 
                     b.Property<int>("TeamCategoryId")
                         .HasColumnType("int");
@@ -340,12 +393,6 @@ namespace VTW.DAL.Migrations
                         .IsRequired()
                         .HasMaxLength(150)
                         .HasColumnType("nvarchar(150)");
-
-                    b.Property<byte[]>("Version")
-                        .IsConcurrencyToken()
-                        .IsRequired()
-                        .ValueGeneratedOnAddOrUpdate()
-                        .HasColumnType("rowversion");
 
                     b.HasKey("Id");
 
@@ -363,6 +410,9 @@ namespace VTW.DAL.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
+                    b.Property<int>("CreatedBy")
+                        .HasColumnType("int");
+
                     b.Property<DateTime>("CreatedDate")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
@@ -372,19 +422,17 @@ namespace VTW.DAL.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<bool>("IsDeleted")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bit")
-                        .HasDefaultValue(false);
+                        .HasColumnType("bit");
 
-                    b.Property<string>("TeamCategoryName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<byte[]>("Version")
+                    b.Property<byte[]>("RowVersion")
                         .IsConcurrencyToken()
                         .IsRequired()
                         .ValueGeneratedOnAddOrUpdate()
                         .HasColumnType("rowversion");
+
+                    b.Property<string>("TeamCategoryName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
@@ -400,6 +448,9 @@ namespace VTW.DAL.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"), 1L, 1);
 
+                    b.Property<long>("CreatedBy")
+                        .HasColumnType("bigint");
+
                     b.Property<DateTime>("CreatedDate")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
@@ -408,93 +459,54 @@ namespace VTW.DAL.Migrations
                     b.Property<DateTime?>("DeletedDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<DateTime>("EndDate")
-                        .HasColumnType("datetime2");
+                    b.Property<int>("GameTeamInfoId")
+                        .HasColumnType("int");
 
                     b.Property<bool>("IsDeleted")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bit")
-                        .HasDefaultValue(false);
-
-                    b.Property<bool>("IsFinished")
                         .HasColumnType("bit");
 
-                    b.Property<bool>("IsStarted")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTime>("StartDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<long?>("TeamId")
-                        .HasColumnType("bigint");
-
-                    b.Property<byte[]>("Version")
+                    b.Property<byte[]>("RowVersion")
                         .IsConcurrencyToken()
                         .IsRequired()
                         .ValueGeneratedOnAddOrUpdate()
                         .HasColumnType("rowversion");
 
+                    b.Property<int?>("TeamId")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("VoteAmount")
+                        .HasPrecision(12)
+                        .HasColumnType("decimal(12,2)");
+
+                    b.Property<DateTime>("VotedDate")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("(getdate())");
+
+                    b.Property<string>("VoterId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
                     b.HasKey("Id");
 
+                    b.HasIndex("GameTeamInfoId");
+
                     b.HasIndex("TeamId");
+
+                    b.HasIndex("VoterId");
 
                     b.ToTable("Votes", (string)null);
-                });
-
-            modelBuilder.Entity("VTW.DAL.Entities.VoteTeamInfo", b =>
-                {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint")
-                        .HasColumnName("VoteTeamInfoId");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"), 1L, 1);
-
-                    b.Property<DateTime>("CreatedDate")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime2")
-                        .HasDefaultValueSql("(getdate())");
-
-                    b.Property<DateTime?>("DeletedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<bool>("IsDeleted")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bit")
-                        .HasDefaultValue(false);
-
-                    b.Property<long>("TeamId")
-                        .HasColumnType("bigint");
-
-                    b.Property<decimal>("TotalAmount")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<float>("TotalPercent")
-                        .HasColumnType("real");
-
-                    b.Property<byte[]>("Version")
-                        .IsConcurrencyToken()
-                        .IsRequired()
-                        .ValueGeneratedOnAddOrUpdate()
-                        .HasColumnType("rowversion");
-
-                    b.Property<long>("VoteId")
-                        .HasColumnType("bigint");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("TeamId");
-
-                    b.HasIndex("VoteId");
-
-                    b.ToTable("VoteTeamInfos", (string)null);
                 });
 
             modelBuilder.Entity("VTW.DAL.Entities.Voter", b =>
                 {
                     b.HasBaseType("Microsoft.AspNetCore.Identity.IdentityUser");
 
-                    b.HasDiscriminator().HasValue("Voter");
+                    b.Property<decimal>("Balance")
+                        .HasPrecision(12)
+                        .HasColumnType("decimal(12,2)");
+
+                    b.ToTable("Voters", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -548,23 +560,23 @@ namespace VTW.DAL.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("VTW.DAL.Entities.Bet", b =>
+            modelBuilder.Entity("VTW.DAL.Entities.GameTeamInfo", b =>
                 {
-                    b.HasOne("VTW.DAL.Entities.VoteTeamInfo", "VoteTeamInfoNavigation")
-                        .WithMany("BetNavigations")
-                        .HasForeignKey("VoteTeamInfoId")
+                    b.HasOne("VTW.DAL.Entities.Game", "GameNavigation")
+                        .WithMany("GameTeamInfoNavigations")
+                        .HasForeignKey("GameId")
                         .IsRequired()
-                        .HasConstraintName("FK_Bets_VoteTeamInfo");
+                        .HasConstraintName("FK_GameTeamInfos_Game");
 
-                    b.HasOne("VTW.DAL.Entities.Voter", "VoterNavigation")
-                        .WithMany("BetNavigations")
-                        .HasForeignKey("VoterId")
-                        .IsRequired()
-                        .HasConstraintName("FK_Bets_Voter");
+                    b.HasOne("VTW.DAL.Entities.Team", "TeamNavigation")
+                        .WithMany()
+                        .HasForeignKey("TeamId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    b.Navigation("VoteTeamInfoNavigation");
+                    b.Navigation("GameNavigation");
 
-                    b.Navigation("VoterNavigation");
+                    b.Navigation("TeamNavigation");
                 });
 
             modelBuilder.Entity("VTW.DAL.Entities.RefreshToken", b =>
@@ -591,28 +603,44 @@ namespace VTW.DAL.Migrations
 
             modelBuilder.Entity("VTW.DAL.Entities.Vote", b =>
                 {
+                    b.HasOne("VTW.DAL.Entities.GameTeamInfo", "GameTeamInfoNavigation")
+                        .WithMany("VoteNavigations")
+                        .HasForeignKey("GameTeamInfoId")
+                        .IsRequired()
+                        .HasConstraintName("FK_Votes_GameTeamInfo");
+
                     b.HasOne("VTW.DAL.Entities.Team", null)
                         .WithMany("VoteTeamNavigations")
                         .HasForeignKey("TeamId");
+
+                    b.HasOne("VTW.DAL.Entities.Voter", "VoterNavigation")
+                        .WithMany("VoteNavigations")
+                        .HasForeignKey("VoterId")
+                        .IsRequired()
+                        .HasConstraintName("FK_Votes_Voter");
+
+                    b.Navigation("GameTeamInfoNavigation");
+
+                    b.Navigation("VoterNavigation");
                 });
 
-            modelBuilder.Entity("VTW.DAL.Entities.VoteTeamInfo", b =>
+            modelBuilder.Entity("VTW.DAL.Entities.Voter", b =>
                 {
-                    b.HasOne("VTW.DAL.Entities.Team", "TeamNavigation")
-                        .WithMany()
-                        .HasForeignKey("TeamId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", null)
+                        .WithOne()
+                        .HasForeignKey("VTW.DAL.Entities.Voter", "Id")
+                        .OnDelete(DeleteBehavior.ClientCascade)
                         .IsRequired();
+                });
 
-                    b.HasOne("VTW.DAL.Entities.Vote", "VoteNavigation")
-                        .WithMany("VoteTeamInfoNavigations")
-                        .HasForeignKey("VoteId")
-                        .IsRequired()
-                        .HasConstraintName("FK_VoteTeamInfos_Vote");
+            modelBuilder.Entity("VTW.DAL.Entities.Game", b =>
+                {
+                    b.Navigation("GameTeamInfoNavigations");
+                });
 
-                    b.Navigation("TeamNavigation");
-
-                    b.Navigation("VoteNavigation");
+            modelBuilder.Entity("VTW.DAL.Entities.GameTeamInfo", b =>
+                {
+                    b.Navigation("VoteNavigations");
                 });
 
             modelBuilder.Entity("VTW.DAL.Entities.Team", b =>
@@ -625,19 +653,9 @@ namespace VTW.DAL.Migrations
                     b.Navigation("TeamNavigations");
                 });
 
-            modelBuilder.Entity("VTW.DAL.Entities.Vote", b =>
-                {
-                    b.Navigation("VoteTeamInfoNavigations");
-                });
-
-            modelBuilder.Entity("VTW.DAL.Entities.VoteTeamInfo", b =>
-                {
-                    b.Navigation("BetNavigations");
-                });
-
             modelBuilder.Entity("VTW.DAL.Entities.Voter", b =>
                 {
-                    b.Navigation("BetNavigations");
+                    b.Navigation("VoteNavigations");
                 });
 #pragma warning restore 612, 618
         }

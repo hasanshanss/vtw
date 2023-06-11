@@ -35,12 +35,20 @@ namespace VTW.DAL.Entities
             set { createdDate = value; }
         }
 
+        private string createdBy;
+        public string CreatedBy
+        {
+            get { return this.createdBy; }
+            set { this.createdBy = value; }
+        }
+
+
         [DataType(DataType.DateTime)]
         public DateTime? DeletedDate { get; set; }
 
         public bool IsDeleted { get; set; }
 
         [Timestamp]
-        public byte[] Version { get; set; }
+        public byte[] RowVersion { get; set; }
     }
 }

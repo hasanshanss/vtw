@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
-using VTW.API.Services.Contracts.Error;
+using VTW.API.Services.Contracts.V1.Error;
 
 namespace VTW.API.Filters
 {

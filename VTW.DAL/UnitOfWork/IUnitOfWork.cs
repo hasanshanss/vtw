@@ -10,7 +10,7 @@ namespace VTW.DAL.UnitOfWork
     public interface IUnitOfWork
     {
         public ITeamRepository TeamRepository { get; }
-        public IVoteRepository VoteRepository { get; }
+        public IGameRepository GameRepository { get; }
         Task CommitAsync();
     }
 }

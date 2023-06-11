@@ -9,7 +9,7 @@
                 return string.Empty;
             }
 
-            return httpContext.User.Claims.Single(c => c.Type == "Id").Value;
+            return httpContext.User.Claims?.Single(c => c.Type == "UserId").Value;
         }
     }
 }

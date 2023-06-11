@@ -7,7 +7,7 @@ using VTW.DAL.Entities;
 
 namespace VTW.DAL.Repositories.Abstractions
 {
-    public interface ITeamRepository : IRepository<Team, long>
+    public interface ITeamRepository : IRepository<Team, int>
     {
     }
 }

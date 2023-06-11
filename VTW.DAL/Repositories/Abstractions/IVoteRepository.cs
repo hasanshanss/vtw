@@ -9,5 +9,6 @@ namespace VTW.DAL.Repositories.Abstractions
 {
     public interface IVoteRepository : IRepository<Vote, long>
     {
+
     }
 }

@@ -12,7 +12,7 @@ namespace VTW.DAL.UnitOfWork
     public class UnitOfWork : IUnitOfWork
     {
         private VtwContext _vtwContext;
-        private IVoteRepository _voteRepository;
+        private IGameRepository _GameRepository;
         private ITeamRepository _teamRepository;
         private ITeamCategoryRepository _teamCategoryRepository;
 
@@ -21,13 +21,14 @@ namespace VTW.DAL.UnitOfWork
             _vtwContext = vtwContext;
         }
 
-        public IVoteRepository VoteRepository
+        public IGameRepository GameRepository
         {
             get
             {
-                return _voteRepository ?? (_voteRepository = new VoteRepository(_vtwContext));
+                return _GameRepository ?? (_GameRepository = new GameRepository(_vtwContext));
             }
         }
+
 
         public ITeamRepository TeamRepository
         {

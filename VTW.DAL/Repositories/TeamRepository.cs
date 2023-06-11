@@ -9,7 +9,7 @@ using VTW.DAL.Repositories.Abstractions;
 
 namespace VTW.DAL.Repositories
 {
-    public class TeamRepository : BaseRepository<Team, long>, ITeamRepository
+    public class TeamRepository : BaseRepository<Team, int>, ITeamRepository
     {
         public TeamRepository(VtwContext context) : base(context)
         {

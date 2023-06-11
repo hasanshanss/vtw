@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
@@ -19,8 +20,17 @@ namespace VTW.DAL.Repositories.Abstractions
             Expression<Func<TEntity, bool>> filter = null,
             Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null,
             string includeProperties = "",
+            bool ignoreQueryFilter = true);
+
+        TEntity MaxBy<TKey>(
+            Expression<Func<TEntity, TKey>> filter,
+            bool ignoreQueryFilter = false);
+
+        TEntity MinBy<TKey>(
+            Expression<Func<TEntity, TKey>> filter,
             bool ignoreQueryFilter = false);
         Task<TEntity> FindAsync(TId id);
+        Task<TEntity> SingleOrDefaultAsync(Expression<Func<TEntity, bool>> filter = null);
         Task<TEntity> FindAsNoTrackingAsync(TId id);
         Task<TEntity> FindIgnoreQueryFilterAsync(TId id);
         IEnumerable<TEntity> GetAll();
@@ -29,10 +39,10 @@ namespace VTW.DAL.Repositories.Abstractions
         Task<int> GetCountAsync();
 
         //Insert&Update
-        Task AddAsync(TEntity entity);
-        Task AddRangeAsync(IEnumerable<TEntity> entity);
-        void Update(TEntity entityToUpdate);
-        void UpdateRange(IEnumerable<TEntity> entityList);
+        Task<TEntity> AddAsync(TEntity entity);
+        Task<IEnumerable<TEntity>> AddRangeAsync(IEnumerable<TEntity> entityList);
+        TEntity Update(TEntity entityToUpdate);
+        IEnumerable<TEntity> UpdateRange(IEnumerable<TEntity> entityList);
 
         IEnumerable<TEntity> GetWithRawSql(string query,
             params object[] parameters);

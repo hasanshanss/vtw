@@ -11,9 +11,11 @@ namespace VTW.DAL.Entities
     {
         public Voter()
         {
-            BetNavigations = new HashSet<Bet>();
+            VoteNavigations = new HashSet<Vote>();
         }
 
-        public virtual ICollection<Bet> BetNavigations { get; set; }
+        public decimal Balance { get; set; }
+
+        public virtual ICollection<Vote> VoteNavigations { get; set; }
     }
 }

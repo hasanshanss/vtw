@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
@@ -12,11 +12,13 @@
 
   <ItemGroup>
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.0" />
+    <PackageReference Include="EntityFrameworkCore.Triggered" Version="3.2.1" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Contracts\TeamCategory\Responses\" />
-    <Folder Include="Contracts\Team\Responses\" />
+    <Folder Include="Contracts\V1\TeamCategoryContracts\Responses\" />
+    <Folder Include="Contracts\V1\TeamContracts\Responses\" />
+    <Folder Include="Contracts\V1\GameContracts\Responses\" />
   </ItemGroup>
 
 </Project>

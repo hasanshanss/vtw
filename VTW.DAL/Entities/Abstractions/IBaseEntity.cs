@@ -14,7 +14,7 @@ namespace VTW.DAL.Entities.Abstractions
 
         bool IsDeleted { get; set; }
        
-        byte[] Version { get; set; }
+        byte[] RowVersion { get; set; }
     }
 
     public interface IBaseEntity<T> : IBaseEntity

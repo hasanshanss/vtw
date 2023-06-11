@@ -10,7 +10,7 @@ using VTW.DAL.Entities;
 namespace VTW.DAL.Configurations
 {
 
-    class TeamConfiguration : BaseEntityConfiguration<Team, long>
+    class TeamConfiguration : BaseEntityConfiguration<Team, int>
     {
         public override void Configure(EntityTypeBuilder<Team> builder)
         {

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace VTW.DAL.Entities
 {
-    public partial class Team : BaseEntity<long>
+    public partial class Team : BaseEntity<int>
     {
         public Team()
         {
